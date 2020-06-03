@@ -72,7 +72,7 @@ void MyGlWindow::createMovers()
 	Color obj_color = Color(1, 0, 0);
 	Color shadow_color = Color(0.1, 0.1, 0.1);
 
-	m_world = new cyclone::ParticleWorld(120);
+	m_world = new cyclone::ParticleWorld(1000);
 
 	groundContact = new cyclone::MyGroundContact();
 
@@ -93,7 +93,7 @@ void MyGlWindow::createMovers()
 		//Increment x to next place
 		if (z == -1)
 			x += 3;
-		
+
 		z *= -1;
 	}
 }
@@ -143,7 +143,7 @@ void MyGlWindow::setupLight(float x, float y, float z)
 
 void MyGlWindow::setupGround()
 {
-	for (size_t i = 0; i < 12; i++)
+	for (size_t i = 0; i < m_container->m_movers.size(); i++)
 	{
 		groundContact->init(m_container->m_movers[i]->m_particle, size);
 	}
@@ -155,9 +155,12 @@ void MyGlWindow::setupCables()
 {
 	int j = 0;
 
-	for (size_t i = 0; i < 5; i++)
+	if (m_container->m_movers.size() <= 1)
+		return;
+
+	for (size_t i = 0; i < (m_container->m_movers.size() / 2) - 1; i++)
 	{
-		cyclone::ParticleCable *cable = new cyclone::ParticleCable();
+		cyclone::ParticleCable* cable = new cyclone::ParticleCable();
 		cables.emplace_back(cable);
 
 		cable->particle[0] = m_container->m_movers[j]->m_particle;
@@ -172,9 +175,9 @@ void MyGlWindow::setupCables()
 
 	j = 1;
 
-	for (size_t i = 5; i < 10; i++)
+	for (size_t i = 5; i < m_container->m_movers.size() - 2; i++)
 	{
-		cyclone::ParticleCable *cable = new cyclone::ParticleCable();
+		cyclone::ParticleCable* cable = new cyclone::ParticleCable();
 		cables.emplace_back(cable);
 
 		cable->particle[0] = m_container->m_movers[j]->m_particle;
@@ -196,7 +199,7 @@ void MyGlWindow::setupCollisions()
 			if (first == second)
 				continue;
 
-			cyclone::ParticleCollision *particleCollision = new cyclone::ParticleCollision(size);
+			cyclone::ParticleCollision* particleCollision = new cyclone::ParticleCollision(size);
 			particleCollision->size = (m_container->m_movers[first]->m_size + m_container->m_movers[second]->m_size) / 2;
 
 			particleCollision->particle[0] = m_container->m_movers[first]->m_particle;
@@ -211,9 +214,9 @@ void MyGlWindow::setupRods()
 {
 	int j = 0;
 
-	for (size_t i = 0; i < 6; i++)
+	for (size_t i = 0; i < m_container->m_movers.size() / 2; i++)
 	{
-		cyclone::ParticleRod *rod = new cyclone::ParticleRod();
+		cyclone::ParticleRod* rod = new cyclone::ParticleRod();
 		rods.emplace_back(rod);
 
 		rod->particle[0] = m_container->m_movers[j]->m_particle;
@@ -230,9 +233,9 @@ void MyGlWindow::setupCableConstraints()
 {
 	cyclone::Vector3 position;
 
-	for (size_t i = 0; i < 12; i++)
+	for (size_t i = 0; i < m_container->m_movers.size(); i++)
 	{
-		cyclone::ParticleCableConstraint *support = new cyclone::ParticleCableConstraint();
+		cyclone::ParticleCableConstraint* support = new cyclone::ParticleCableConstraint();
 		supports.emplace_back(support);
 
 		support->particle = m_container->m_movers[i]->m_particle;
@@ -298,7 +301,7 @@ void MyGlWindow::attachMultipleMovers()
 	m_container->initForces();
 }
 
-void MyGlWindow::attachMoversToAnchor(cyclone::Vector3 *anchor)
+void MyGlWindow::attachMoversToAnchor(cyclone::Vector3* anchor)
 {
 	for (unsigned int i = 0; i < m_container->m_movers.size(); i++) {
 		m_container->m_movers[i]->setAnchoredConnection(anchor, 5, 5);
