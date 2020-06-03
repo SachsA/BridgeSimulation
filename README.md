@@ -1,16 +1,13 @@
-# OpenGL Firework Simulation
+# OpenGL Bridge Simulation
 
 ##### Project done in Computer Graphics, at KMU, South Korea
 
 ### The Project
 ##### It's developed in C++ with OpenGL
 
-##### It's a Firework simulation made with C++ language and OpenGL.
-##### You can see here: a some spheres lanched from the ground into the air, they are in diferent colors, and they give birth to other spheres which are impacted by some customizable rules impacting their mass, gravity, velocity...
+##### It's a Bridge simulation made with C++ language and OpenGL.
+##### You can see here: a simulation of the physics of a bridge: cables, supports, rods, wind...
 ##### The code is pretty well optimized.
-
-### You can change the mass, damping, velocity, acceleration.. of the initial fireworks in the Fire(); function.
-### You can add/remove/change the rules impacting in the children in the Fireworks(); constructor.
 
 ### Usage
 How to use the project ?
